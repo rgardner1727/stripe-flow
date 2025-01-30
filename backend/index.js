@@ -6,12 +6,12 @@ const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SK_TEST);
 const cors = require('cors');
 
-app.use(express.json());
 app.use(cors());
 
 const registerRouter = require('./routes/authRoutes/registerRoute');
 const loginRouter = require('./routes/authRoutes/loginRoute');
 const customerRouter = require('./routes/stripeRoutes/retrieveCustomerRoute');
+const webhookRouter = require('./routes/stripeRoutes/webhookRoute');
 
 mongoose.connect(process.env.MONGO_DB_URL)
     .then(console.log('Connected to Mongo DB'))
@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGO_DB_URL)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/retrieve-customer', customerRouter);
+app.use('/webhook', webhookRouter);
 
 app.get('/', (req, res) => {
     res.send('Backend server is working properly.');

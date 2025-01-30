@@ -3,6 +3,8 @@ const router = express.Router();
 
 const User = require('../../schemas/userSchema');
 
+router.use(express.json({type: 'application/json'}));
+
 router.post('/', async (req, res) => {
     try {
         const {email, password} = req.body;
