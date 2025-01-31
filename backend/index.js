@@ -2,8 +2,6 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
-const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SK_TEST);
 const cors = require('cors');
 
 app.use(cors());
@@ -11,7 +9,8 @@ app.use(cors());
 const registerRouter = require('./routes/authRoutes/registerRoute');
 const loginRouter = require('./routes/authRoutes/loginRoute');
 const webhookRouter = require('./routes/stripeRoutes/webhookRoute');
-const customerRouter = require('./routes/stripeRoutes/customerRoute');
+const subscriptionRouter = require('./routes/stripeRoutes/subscriptionRoute');
+const pricesRouter = require('./routes/stripeRoutes/pricesRoute');
 
 mongoose.connect(process.env.MONGO_DB_URL)
     .then(console.log('Connected to Mongo DB'))
@@ -20,7 +19,8 @@ mongoose.connect(process.env.MONGO_DB_URL)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/webhook', webhookRouter);
-app.use('/customer', customerRouter);
+app.use('/create-subscription', subscriptionRouter);
+app.use('/prices', pricesRouter);
 
 app.get('/', (req, res) => {
     res.send('Backend server is working properly.');
