@@ -8,10 +8,6 @@ const LoginComponent = () => {
     const {isAuthenticated, login} = useAuth();
     const navigate = useNavigate();
 
-    if(isAuthenticated){
-        return navigate('/');
-    }
-
     const handleSubmit = async e => {
         e.preventDefault();
         try {
