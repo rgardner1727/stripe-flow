@@ -26,7 +26,7 @@ export const SubscriptionProvider = ({children}) => {
                 setSubscriptionId(response.data.subscriptionId);
                 setClientSecret(response.data.clientSecret);
             })
-            .catch(error => {throw error});
+            .catch(error => console.log(error));
     }
 
     return (

@@ -17,7 +17,11 @@ router.post('/', async (req, res) => {
             payment_behavior: 'default_incomplete',
             payment_settings: {save_default_payment_method: 'on_subscription'},
             expand: ['latest_invoice.payment_intent']
-        })
+        });
+
+        user.stripeSubscriptionId = subscription.id;
+
+        await user.save();
 
         res.status(201).json({
             subscriptionId: subscription.id, 

@@ -3,7 +3,7 @@ import {loadStripe} from '@stripe/stripe-js';
 import {Elements} from '@stripe/react-stripe-js';
 import PaymentForm from "./PaymentForm";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
+const stripePromise = loadStripe(import.meta.env.VITE_PK_TEST);
 
 const StripeComponent = () => {
     const {subscriptionId, clientSecret} = useSubscription();
@@ -18,8 +18,6 @@ const StripeComponent = () => {
 
     return (
         <main className='main'>
-            <div>{subscriptionId}</div>
-            <div>{clientSecret}</div>
             {clientSecret && <Elements stripe={stripePromise} options={options}>
                 <PaymentForm/>
             </Elements>}

@@ -14,7 +14,7 @@ const RegisterComponent = () => {
         try {
             const registerResult = await register(name, email, password);
             if(registerResult){
-                navigate('/');
+                navigate('/login');
             }
         } catch(error) {
             console.log(error);
