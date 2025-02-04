@@ -1,22 +1,25 @@
 import {PaymentElement} from '@stripe/react-stripe-js';
 import {useStripe, useElements} from '@stripe/react-stripe-js';
 
-const PaymentForm = () => {
+const PaymentComponent = () => {
     const stripe = useStripe();
     const elements = useElements();
+    
     const handleSubmit = async e => {
         e.preventDefault();
         if(!stripe || !elements) return;
+        
         const {error} = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: 'http://localhost:5173/success'
+                return_url: `${window.location.origin}/stripe/success`
             }
         })
         if(error) {
             console.log(error);
         }
     }
+    
     return (
         <form className='payment-form' onSubmit={handleSubmit}>
             <PaymentElement />
@@ -25,4 +28,4 @@ const PaymentForm = () => {
     )
 }
 
-export default PaymentForm;
+export default PaymentComponent;

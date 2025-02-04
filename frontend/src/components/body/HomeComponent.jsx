@@ -1,4 +1,4 @@
-import {useAuth} from '../contexts/AuthContext';
+import {useAuth} from '../../contexts/AuthContext';
 
 const HomeComponent = () => {
     const {email} = useAuth();

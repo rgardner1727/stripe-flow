@@ -16,3 +16,9 @@ html, body, #root {
   display: grid;
   grid-template-rows: 100px auto 100px;
 }
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
