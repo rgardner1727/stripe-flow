@@ -8,6 +8,7 @@ import LogoutComponent from './components/auth/LogoutComponent';
 import AuthenticatedComponent from './components/auth/AuthenticatedComponent';
 import HomeComponent from './components/body/HomeComponent';
 import SubscriptionsComponent from './components/body/SubscriptionsComponent';
+import ManageSubscriptionComponent from './components/subscription/ManageSubscriptionComponent';
 import StripeComponent from './components/stripe/StripeComponent';
 import PaymentComponent from './components/stripe/PaymentComponent';
 import SuccessComponent from './components/stripe/SuccessComponent';
@@ -30,6 +31,7 @@ function App() {
             <Route path='/logout' element={<AuthenticatedComponent><LogoutComponent/></AuthenticatedComponent>}/>
             <Route path='/' element={<AuthenticatedComponent><HomeComponent/></AuthenticatedComponent>}/>
             <Route path='/subscriptions' element={<AuthenticatedComponent><SubscriptionsComponent/></AuthenticatedComponent>}/>
+            <Route path='/manage-subscription' element={<AuthenticatedComponent><ManageSubscriptionComponent/></AuthenticatedComponent>}/>
             <Route path='/stripe' element={<AuthenticatedComponent><StripeComponent/></AuthenticatedComponent>}>
               <Route path='payment' element={<AuthenticatedComponent><PaymentComponent/></AuthenticatedComponent>}/>
               <Route path='success' element={<AuthenticatedComponent><SuccessComponent/></AuthenticatedComponent>}/>

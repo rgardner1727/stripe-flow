@@ -1,5 +1,6 @@
 import {PaymentElement} from '@stripe/react-stripe-js';
 import {useStripe, useElements} from '@stripe/react-stripe-js';
+import '../../styles/stripe-form.css';
 
 const PaymentComponent = () => {
     const stripe = useStripe();
@@ -22,6 +23,7 @@ const PaymentComponent = () => {
     
     return (
         <form className='payment-form' onSubmit={handleSubmit}>
+            <h1 className='payment-title'>Purchase your subscription</h1>
             <PaymentElement />
             <button className='payment-button' type='submit'>Pay</button>
         </form>

@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
+import '../../styles/form.css';
 
 const RegisterComponent = () => {
     const [name, setName] = useState('');
@@ -27,21 +28,24 @@ const RegisterComponent = () => {
     }
 
     return (
-        <main className='main'>
+        <main className='main-form'>
             <form className='form' onSubmit={handleSubmit}>
+                <h1 className='form-title'>Time to register!</h1>
                 <fieldset className='fieldset'>
-                    <label htmlFor='name'>Name</label>
-                    <input type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
+                    <label className='label' htmlFor='name'>Name</label>
+                    <input className='input' type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
                 </fieldset>
                 <fieldset className='fieldset'>
-                    <label htmlFor='email'>Email</label>
-                    <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <label className='label' htmlFor='email'>Email</label>
+                    <input className='input' type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+
                 </fieldset>
                 <fieldset className='fieldset'>
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <label className='label' htmlFor='password'>Password</label>
+                    <input className='input' type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </fieldset>
-                <button type='submit'>Register</button>
+                <button className='submit-button' type='submit'>Register</button>
+                <Link className='form-link' to='/login'>Already have an account? Login here.</Link>
             </form>
         </main>
     )

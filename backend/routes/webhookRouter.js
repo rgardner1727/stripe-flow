@@ -57,6 +57,25 @@ router.post('/', (req, res) => {
                 }
             })();
             break;
+
+        case 'customer.subscription.deleted':
+            const subscriptionDeleted = event.data.object;
+            console.log('Subscription deleted', subscriptionDeleted.id);
+            (async () => {
+                try {
+                    const email = subscriptionDeleted.customer_email;
+                    const user = await User.findOne({email: email});
+                    if(!user)
+                        return res.status(404).json({message: 'User with email not found.'});
+                    user.subscription.id = null;
+                    user.subscription.status = 'inactive';
+                    user.subscription.type = null;
+                    await user.save();
+                } catch(error) {
+                    console.log('Error cancelling subscription', error);
+                }
+            })();
+            break;
             
         case 'customer.subscription.updated':
             const subscription = event.data.object;

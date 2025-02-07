@@ -1,47 +1,113 @@
-.main-inactive {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.main-active {
+.subscription-section {
+    width: 100%;
+    height: 100%;
     display: grid;
-    grid-template-columns: 50% 50%;
-    padding: 20px;
+    grid-template-rows: 15% 85%;
 }
 
-.active-subscription-details-container {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-rows: 25% 75%;
-}
-
-.update-subscription-container {
-    display: grid;
-    justify-content: center;    
-    align-items: center;
-    grid-template-rows: 25% 75%;
-}
-
-
-.subscription-card {
+.subscription-header-container {
+    border-bottom: 1px solid #333;
     height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
+}
+
+.subscription-header {
+    margin-left: 10px;
+}
+
+.subscriptions-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.subscription-card {
+    display: grid;
+    grid-template-rows: 12.5% 25% 50% 12.5%;
+    width: 300px;
+    height: 350px;
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 8px 0 #333;
-    padding: 20px;
+    padding: 10px 20px;
 }
 
 .subscription-title {
-    font-size: 1.5rem;
+    justify-self: left;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #000;
+    display: block;
+    width: 100%;
     margin-bottom: 10px;
 }
 
+.price-container {
+    display: flex;
+    justify-content: center;
+}
 
+.per-month-container {
+    padding-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.subscription-price {
+    margin-top: 10px;
+    padding-right: 5px;
+    justify-self: center;
+    font-size: 3rem;
+    border-right: 1px solid #333;
+}
+
+.subscription-price-month {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.features-container {
+    padding: 0px 10px;
+    margin-bottom: 10px;
+}
+
+.subscription-features {
+    justify-self: center;
+}
+
+.subscription-feature {
+    font-size: .875rem;
+    margin-top: 5px;
+}
+
+.feature-title {
+    font-weight: 600;
+}
+
+.subscription-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(0, 0, 255, 0.75);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-subscription-button {
+    margin-left: auto;
+    margin-right: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(0, 0, 255, 0.75);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
 

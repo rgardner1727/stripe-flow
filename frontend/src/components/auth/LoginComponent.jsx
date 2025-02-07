@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
+import '../../styles/form.css';
 
 const LoginComponent = () => {
     const [email, setEmail] = useState('');
@@ -26,17 +27,19 @@ const LoginComponent = () => {
     }
 
     return (
-        <main className='main'>
+        <main className='main-form'>
             <form className='form' onSubmit={handleSubmit}>
+                <h1 className='form-title'>Time to login!</h1>
                 <fieldset className='fieldset'>
-                    <label htmlFor='email'>Email</label>
-                    <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <label className='label' htmlFor='email'>Email</label>
+                    <input className='input' type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </fieldset>
                 <fieldset className='fieldset'>
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <label className='label' htmlFor='password'>Password</label>
+                    <input className='input' type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </fieldset>
-                <button type='submit'>Login</button>
+                <button className='submit-button' type='submit'>Login</button>
+                <Link className='form-link' to='/register'>Don't have an account? Register here.</Link>
             </form>
         </main>
     )
