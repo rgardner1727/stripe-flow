@@ -10,21 +10,20 @@ export const SubscriptionProvider = ({children}) => {
     const [clientSecret, setClientSecret] = useState(null);
     const [subscriptionStatus, setSubscriptionStatus] = useState(null);
     const [subscriptionType, setSubscriptionType] = useState(null);
-    const {email} = useAuth();
+    const { email } = useAuth();
 
     
-    const refreshSubscription = 
-        (async () => {
-            if(email) {
-                await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email})
-                .then(response => {
-                    setSubscriptionStatus(response.data.status);
-                    setSubscriptionType(response.data.type);
-                    console.log(subscriptionStatus);
-                })
-                .catch(error => console.log(error));
-            }
-        })
+    const refreshSubscription = async () => {
+        if(email) {
+            await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email})
+            .then(response => {
+                setSubscriptionStatus(response.data.status);
+                setSubscriptionType(response.data.type);
+                console.log(subscriptionStatus);
+            })
+            .catch(error => console.log(error));
+        }
+    }
 
     const createSubscription = async (subscriptionType) => {
         let priceId;
@@ -46,7 +45,6 @@ export const SubscriptionProvider = ({children}) => {
             .then(response => {
                 setSubscriptionId(response.data.subscriptionId);
                 setClientSecret(response.data.clientSecret);
-                setSubscriptionStatus('temporary');
             })
             .catch(error => {throw error});
 
@@ -55,7 +53,6 @@ export const SubscriptionProvider = ({children}) => {
     const cancelSubscription = async () => {
         await axios.post('http://localhost:3000/stripe/cancel-subscription', {email})
             .then(response => {
-                setSubscriptionStatus('temporary');
                 alert(response.data.message);
             })
             .catch(error => {throw error});

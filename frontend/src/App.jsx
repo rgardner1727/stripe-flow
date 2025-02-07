@@ -18,7 +18,7 @@ import IntermediateWrapperComponent from './components/subscription/Intermediate
 import IntermediateFeatureComponent from './components/feature/IntermediateFeatureComponent';
 import AdvancedWrapperComponent from './components/subscription/AdvancedWrapperComponent';
 import AdvancedFeatureComponent from './components/feature/AdvancedFeatureComponent';
-
+import Footer from './components/body/Footer';
 function App() {
   return (
     <AuthProvider>
@@ -58,9 +58,11 @@ function App() {
               </AuthenticatedComponent>
             }/>
           </Routes>
+          <Footer/>
         </BrowserRouter>
       </SubscriptionProvider>
     </AuthProvider>
+
   )
 }
 

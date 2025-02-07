@@ -1,11 +1,17 @@
-import {useAuth} from '../../contexts/AuthContext';
-import {useSubscription} from '../../contexts/SubscriptionContext';
-import {Link} from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useSubscription } from '../../contexts/SubscriptionContext';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import '../../styles/header.css';
 
+
 const HeaderComponent = () => {
-    const {isAuthenticated} = useAuth();
-    const {subscriptionType} = useSubscription();
+    const { isAuthenticated } = useAuth();
+    const { subscriptionType, subscriptionStatus, refreshSubscription } = useSubscription();
+
+    useEffect(() => {
+        refreshSubscription();
+    }, [subscriptionType, subscriptionStatus]);
     
     return (
         isAuthenticated && <header className='header'>
