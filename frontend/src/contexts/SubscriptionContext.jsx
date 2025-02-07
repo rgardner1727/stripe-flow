@@ -12,24 +12,19 @@ export const SubscriptionProvider = ({children}) => {
     const [subscriptionType, setSubscriptionType] = useState(null);
     const {email} = useAuth();
 
-    useEffect(() => {
+    
+    const refreshSubscription = 
         (async () => {
             if(email) {
                 await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email})
                 .then(response => {
                     setSubscriptionStatus(response.data.status);
                     setSubscriptionType(response.data.type);
-                    console.log('effect triggered');
+                    console.log(subscriptionStatus);
                 })
                 .catch(error => console.log(error));
             }
-        })();
-    }, [email, subscriptionStatus]);
-
-    const refreshSubscriptionStatus = () => {
-        setSubscriptionStatus('temporary');
-        console.log(subscriptionStatus);
-    }
+        })
 
     const createSubscription = async (subscriptionType) => {
         let priceId;
@@ -96,7 +91,7 @@ export const SubscriptionProvider = ({children}) => {
         <SubscriptionContext.Provider value={{
             subscriptionId, clientSecret, createSubscription, 
             subscriptionStatus, subscriptionType, cancelSubscription, 
-            refreshSubscriptionStatus, changeSubscription}}>
+            refreshSubscription, changeSubscription}}>
             {children}
         </SubscriptionContext.Provider>
     )

@@ -1,36 +1,36 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 import { useSubscription } from '../../contexts/SubscriptionContext';
-import { useNavigate } from 'react-router-dom';
 import { useStripe } from '@stripe/react-stripe-js';
 
 const SuccessComponent = () => {
     const stripe = useStripe();
-    const { email } = useAuth();
-    const { refreshSubscriptionStatus, subscriptionStatus } = useSubscription();
-    const navigate = useNavigate();
     const [message, setMessage] = useState('');
+    const { subscriptionStatus, refreshSubscription } = useSubscription();
 
     useEffect(() => {
         if (!stripe) return;
         // Get the payment intent client secret from the URL
         const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
 
+        refreshSubscription();
+
         if (clientSecret) {
             stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {
                 if (paymentIntent.status === 'succeeded') {
-                    refreshSubscriptionStatus();
-                    setMessage(`Payment successful. Your payment intent is ${paymentIntent.id}. 
-                        If your subscription is not updated, please refresh the page.`);
+                    setMessage(
+                        <>
+                            <h1>Payment Successful! Your subscription status is {subscriptionStatus}.</h1>
+                            <p>Your Stripe Payment Intent ID is <b>{paymentIntent.id}</b></p>
+                        </>
+                    )
                 }
             });
         }
-    }, [stripe]);
+    }, [stripe, subscriptionStatus]);
 
     return (
         <div className='success-container'>
-            <h1>{message}</h1>
-            <p>Your subscription has been activated.</p>
+            <div>{message}</div>
         </div>
     );
 };

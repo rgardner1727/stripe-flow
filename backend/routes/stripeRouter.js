@@ -25,7 +25,6 @@ router.post('/create-subscription', async (req, res) => {
         });
 
         user.subscription.id = subscription.id;
-        user.subscription.status = subscription.status;
 
         await user.save();
 
@@ -86,7 +85,6 @@ router.post('/change-subscription', async (req, res) => {
             await stripe.subscriptions.update(user.subscription.id, {
                 cancel_at_period_end: true,
             });
-            user.subscription.status = 'cancelled';
         }
         const newSubscription = await stripe.subscriptions.create({
             customer: user.stripeCustomerId,
@@ -99,7 +97,6 @@ router.post('/change-subscription', async (req, res) => {
             }
         })
         user.subscription.id = newSubscription.id;
-        user.subscription.status = newSubscription.status;
         await user.save();
         return res.status(200).send({
             subscriptionId: newSubscription.id,
@@ -110,7 +107,6 @@ router.post('/change-subscription', async (req, res) => {
         res.status(500).send('Internal server error. Could not change subscription.');
     }
 })
-
 
 router.get('/retrieve-prices', async (req, res) => {
     const prices = await stripe.prices.list();

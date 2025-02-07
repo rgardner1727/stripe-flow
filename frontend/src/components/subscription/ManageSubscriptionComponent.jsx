@@ -1,13 +1,17 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../../styles/subscription-comp.css';
 
 const ManageSubscriptionComponent = ({}) => {
     const {email} = useAuth();
-    const {subscriptionType, cancelSubscription, changeSubscription} = useSubscription();
+    const {subscriptionType, cancelSubscription, changeSubscription, refreshSubscription, subscriptionStatus} = useSubscription();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        refreshSubscription();
+    }, [subscriptionStatus]);
 
     const handleCancelSubscription = async e => {
         e.preventDefault();

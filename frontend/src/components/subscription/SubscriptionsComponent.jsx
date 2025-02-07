@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +7,12 @@ import '../../styles/subscription-comp.css';
 
 const SubscriptionsComponent = () => {
     const {email} = useAuth();
-    const {createSubscription, subscriptionStatus, subscriptionType} = useSubscription();
+    const {createSubscription, subscriptionStatus, subscriptionType, refreshSubscription} = useSubscription();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        refreshSubscription();
+    }, []);
 
     const handleSubmit = async (e, subscriptionType) => {
         e.preventDefault();

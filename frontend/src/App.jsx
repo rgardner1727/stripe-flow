@@ -7,7 +7,7 @@ import RegisterComponent from './components/auth/RegisterComponent';
 import LogoutComponent from './components/auth/LogoutComponent';
 import AuthenticatedComponent from './components/auth/AuthenticatedComponent';
 import HomeComponent from './components/body/HomeComponent';
-import SubscriptionsComponent from './components/body/SubscriptionsComponent';
+import SubscriptionsComponent from './components/subscription/SubscriptionsComponent';
 import ManageSubscriptionComponent from './components/subscription/ManageSubscriptionComponent';
 import StripeComponent from './components/stripe/StripeComponent';
 import PaymentComponent from './components/stripe/PaymentComponent';
