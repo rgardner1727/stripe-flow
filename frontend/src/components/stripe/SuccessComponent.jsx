@@ -8,24 +8,26 @@ const SuccessComponent = () => {
     const { subscriptionStatus, refreshSubscription } = useSubscription();
 
     useEffect(() => {
-        if (!stripe) return;
-        // Get the payment intent client secret from the URL
-        const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
+        (async () => {
+            if (!stripe) return;
+            // Get the payment intent client secret from the URL
+            const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
 
-        refreshSubscription();
+            await refreshSubscription();
 
-        if (clientSecret) {
-            stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {
-                if (paymentIntent.status === 'succeeded') {
-                    setMessage(
-                        <>
-                            <h1>Payment Successful! Your subscription status is {subscriptionStatus}.</h1>
-                            <p>Your Stripe Payment Intent ID is <b>{paymentIntent.id}</b></p>
-                        </>
-                    )
-                }
-            });
-        }
+            if (clientSecret) {
+                stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {
+                    if (paymentIntent.status === 'succeeded') {
+                        setMessage(
+                            <>
+                                <h1>Payment Successful! Your subscription status is {subscriptionStatus}.</h1>
+                                <p>Your Stripe Payment Intent ID is <b>{paymentIntent.id}</b></p>
+                            </>
+                        )
+                    }
+                });
+            }
+        })();
     }, [stripe, subscriptionStatus]);
 
     return (
