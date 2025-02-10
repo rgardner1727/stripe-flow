@@ -7,14 +7,7 @@ import '../../styles/header.css';
 
 const HeaderComponent = () => {
     const { isAuthenticated } = useAuth();
-    const { subscriptionType, subscriptionStatus, refreshSubscription } = useSubscription();
-
-    useEffect(() => {
-        (async () => {
-            await refreshSubscription();
-        })();
-    }, [subscriptionType, subscriptionStatus]);
-    
+    const { subscriptionType } = useSubscription();
 
     return (
         isAuthenticated && <header className='header'>
@@ -26,7 +19,9 @@ const HeaderComponent = () => {
                     {(subscriptionType === 'intermediate' || subscriptionType === 'advanced') && <li className='nav-item'><Link to='/intermediate-feature'>Intermediate</Link></li>}
                     {(subscriptionType === 'advanced') && <li className='nav-item'><Link to='/advanced-feature'>Advanced</Link></li>}
                 </ul>
+
                 <ul className='nav-list-right'>
+
                     <li className='nav-item'><Link to='/logout'>Logout</Link></li>
                 </ul>
             </nav>

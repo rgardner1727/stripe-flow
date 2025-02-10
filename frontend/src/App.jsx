@@ -22,47 +22,47 @@ import Footer from './components/body/Footer';
 function App() {
   return (
     <AuthProvider>
-      <SubscriptionProvider>
         <BrowserRouter>
-          <HeaderComponent/>
-          <Routes>
-            <Route path='/login' element={<LoginComponent/>}/>
-            <Route path='/register' element={<RegisterComponent/>}/>
-            <Route path='/logout' element={<AuthenticatedComponent><LogoutComponent/></AuthenticatedComponent>}/>
-            <Route path='/' element={<AuthenticatedComponent><HomeComponent/></AuthenticatedComponent>}/>
-            <Route path='/subscriptions' element={<AuthenticatedComponent><SubscriptionsComponent/></AuthenticatedComponent>}/>
-            <Route path='/manage-subscription' element={<AuthenticatedComponent><ManageSubscriptionComponent/></AuthenticatedComponent>}/>
-            <Route path='/stripe' element={<AuthenticatedComponent><StripeComponent/></AuthenticatedComponent>}>
-              <Route path='payment' element={<AuthenticatedComponent><PaymentComponent/></AuthenticatedComponent>}/>
-              <Route path='success' element={<AuthenticatedComponent><SuccessComponent/></AuthenticatedComponent>}/>
-            </Route>
-            <Route path='/beginner-feature' element={
-              <AuthenticatedComponent>
-                <BeginnerWrapperComponent>
-                  <BeginnerFeatureComponent/>
-                </BeginnerWrapperComponent>
-              </AuthenticatedComponent>
-            }/>
-            <Route path='/intermediate-feature' element={
-              <AuthenticatedComponent>
-                <IntermediateWrapperComponent>
-                  <IntermediateFeatureComponent/>
-                </IntermediateWrapperComponent>
-              </AuthenticatedComponent>
-            }/>
-            <Route path='/advanced-feature' element={
-              <AuthenticatedComponent>
-                <AdvancedWrapperComponent>
-                  <AdvancedFeatureComponent/>
-                </AdvancedWrapperComponent>
-              </AuthenticatedComponent>
-            }/>
-          </Routes>
-          <Footer/>
-        </BrowserRouter>
-      </SubscriptionProvider>
-    </AuthProvider>
+          <SubscriptionProvider>
+            <HeaderComponent/>
+            <Routes>
+              <Route path='/login' element={<LoginComponent/>}/>
+              <Route path='/register' element={<RegisterComponent/>}/>
+              <Route path='/logout' element={<AuthenticatedComponent><LogoutComponent/></AuthenticatedComponent>}/>
+              <Route path='/' element={<AuthenticatedComponent><HomeComponent/></AuthenticatedComponent>}/>
+              <Route path='/subscriptions' element={<AuthenticatedComponent><SubscriptionsComponent/></AuthenticatedComponent>}/>
 
+              <Route path='/manage-subscription' element={<AuthenticatedComponent><ManageSubscriptionComponent/></AuthenticatedComponent>}/>
+              <Route path='/stripe' element={<AuthenticatedComponent><StripeComponent/></AuthenticatedComponent>}>
+                <Route path='payment' element={<AuthenticatedComponent><PaymentComponent/></AuthenticatedComponent>}/>
+                <Route path='success' element={<AuthenticatedComponent><SuccessComponent/></AuthenticatedComponent>}/>
+              </Route>
+              <Route path='/beginner-feature' element={
+                <AuthenticatedComponent>
+                  <BeginnerWrapperComponent>
+                    <BeginnerFeatureComponent/>
+                  </BeginnerWrapperComponent>
+                </AuthenticatedComponent>
+              }/>
+              <Route path='/intermediate-feature' element={
+                <AuthenticatedComponent>
+                  <IntermediateWrapperComponent>
+                    <IntermediateFeatureComponent/>
+                  </IntermediateWrapperComponent>
+                </AuthenticatedComponent>
+              }/>
+              <Route path='/advanced-feature' element={
+                <AuthenticatedComponent>
+                  <AdvancedWrapperComponent>
+                    <AdvancedFeatureComponent/>
+                  </AdvancedWrapperComponent>
+                </AuthenticatedComponent>
+              }/>
+            </Routes>
+            <Footer/>
+          </SubscriptionProvider>
+        </BrowserRouter>
+    </AuthProvider>
   )
 }
 

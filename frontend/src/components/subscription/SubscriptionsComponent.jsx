@@ -11,10 +11,6 @@ const SubscriptionsComponent = () => {
     const {createSubscription, subscriptionStatus, subscriptionType, refreshSubscription} = useSubscription();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        refreshSubscription();
-    }, []);
-
     const handleSubmit = async (e, subscriptionType) => {
         e.preventDefault();
         if(!email)
@@ -65,7 +61,7 @@ const SubscriptionsComponent = () => {
 
 
     return (
-        <main className='main'>
+        subscriptionStatus && <main className='main'>
             {subscriptionStatus === 'active' || subscriptionStatus === 'cancelled' ? 
                 <>
                     <section className='subscription-section'>

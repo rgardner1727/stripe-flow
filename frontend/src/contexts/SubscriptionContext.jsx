@@ -12,16 +12,30 @@ export const SubscriptionProvider = ({children}) => {
     const [subscriptionType, setSubscriptionType] = useState(null);
     const { email } = useAuth();
 
-    
+    useEffect(() => {
+        (async () => {
+            if(email) {
+                try {
+                    const response = await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email});
+                    setSubscriptionStatus(response.data.status);
+                    setSubscriptionType(response.data.type);
+                } catch(error) {
+                    console.log(error);
+                }
+            }
+        })()
+    }, [subscriptionStatus, subscriptionType, email]);
+
     const refreshSubscription = async () => {
         if(email) {
-            await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email})
-            .then(response => {
+            try {
+                const response = await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email});
                 setSubscriptionStatus(response.data.status);
                 setSubscriptionType(response.data.type);
-                console.log(subscriptionStatus);
-            })
-            .catch(error => console.log(error));
+            } catch(error) {
+                throw error;
+            }
+
         }
     }
 
@@ -41,21 +55,22 @@ export const SubscriptionProvider = ({children}) => {
                 console.log('Invalid subscription type');
                 return;
         }
-        await axios.post('http://localhost:3000/stripe/create-subscription', {email, priceId})
-            .then(response => {
+        try {
+            const response = await axios.post('http://localhost:3000/stripe/create-subscription', {email, priceId});
                 setSubscriptionId(response.data.subscriptionId);
                 setClientSecret(response.data.clientSecret);
-            })
-            .catch(error => {throw error});
-
+            } catch(error) {
+                throw error;
+            }
     }
 
     const cancelSubscription = async () => {
-        await axios.post('http://localhost:3000/stripe/cancel-subscription', {email})
-            .then(response => {
-                alert(response.data.message);
-            })
-            .catch(error => {throw error});
+        try {
+            const response = await axios.post('http://localhost:3000/stripe/cancel-subscription', {email});
+            alert(response.data.message);
+            } catch(error) {
+                throw error;
+            }
     }
 
     const changeSubscription = async (subscriptionType) => {
@@ -74,13 +89,14 @@ export const SubscriptionProvider = ({children}) => {
                 console.log('Invalid subscription type');
                 return;
         }
-        await axios.post('http://localhost:3000/stripe/change-subscription', {email, priceId})
-            .then(response => {
+        try {
+            const response = await axios.post('http://localhost:3000/stripe/change-subscription', {email, priceId});
                 setSubscriptionId(response.data.subscriptionId);
                 setClientSecret(response.data.clientSecret);
                 setSubscriptionStatus('temporary');
-            })
-            .catch(error => {throw error});
+            } catch(error) {
+                throw error;
+            }
     }
 
 
@@ -92,6 +108,7 @@ export const SubscriptionProvider = ({children}) => {
             {children}
         </SubscriptionContext.Provider>
     )
+
 }
 
 export const useSubscription = () => useContext(SubscriptionContext);

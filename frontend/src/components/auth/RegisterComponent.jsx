@@ -4,9 +4,11 @@ import {useNavigate, Link} from 'react-router-dom';
 import '../../styles/form.css';
 
 const RegisterComponent = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [form, setForm] = useState({
+        name: '',
+        email: '', 
+        password: ''
+    })
     const {isAuthenticated, register} = useAuth();
     const navigate = useNavigate();
 
@@ -15,10 +17,17 @@ const RegisterComponent = () => {
             return navigate('/');
     })
 
+    const handleChange = e => {
+        setForm(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const registerResult = await register(name, email, password);
+            const registerResult = await register(form.name, form.email, form.password);
             if(registerResult){
                 navigate('/login');
             }
@@ -33,16 +42,17 @@ const RegisterComponent = () => {
                 <h1 className='form-title'>Time to register!</h1>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='name'>Name</label>
-                    <input className='input' type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
+                    <input className='input' type='text' name='name' value={form.name} placeholder='Name' onChange={handleChange}/>
                 </fieldset>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='email'>Email</label>
-                    <input className='input' type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <input className='input' type='email' name='email' value={form.email} placeholder='Email' onChange={handleChange}/>
+
 
                 </fieldset>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='password'>Password</label>
-                    <input className='input' type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input className='input' type='password' name='password' value={form.password} placeholder='Password' onChange={handleChange}/>
                 </fieldset>
                 <button className='submit-button' type='submit'>Register</button>
                 <Link className='form-link' to='/login'>Already have an account? Login here.</Link>

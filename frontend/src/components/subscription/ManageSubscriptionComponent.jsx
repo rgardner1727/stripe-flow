@@ -10,10 +10,6 @@ const ManageSubscriptionComponent = ({}) => {
     const { subscriptionType, cancelSubscription, changeSubscription, refreshSubscription, subscriptionStatus } = useSubscription();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        refreshSubscription();
-    }, [subscriptionStatus]);
-
     const handleCancelSubscription = async e => {
         e.preventDefault();
         cancelSubscription()

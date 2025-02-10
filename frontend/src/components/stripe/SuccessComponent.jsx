@@ -4,11 +4,17 @@ import { useStripe } from '@stripe/react-stripe-js';
 
 const SuccessComponent = () => {
     const stripe = useStripe();
-    const [message, setMessage] = useState('');
-    const { subscriptionStatus, refreshSubscription } = useSubscription();
+    const [paymentIntentId, setPaymentIntentId] = useState('');
+    const { subscriptionStatus, subscriptionType, refreshSubscription } = useSubscription();
+    const [isLoading, setIsLoading] = useState(true);
+
+    setTimeout(() => {
+        setIsLoading(false);
+    }, 2000);
 
     useEffect(() => {
         (async () => {
+            if(isLoading) return;
             if (!stripe) return;
             // Get the payment intent client secret from the URL
             const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
@@ -18,22 +24,24 @@ const SuccessComponent = () => {
             if (clientSecret) {
                 stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {
                     if (paymentIntent.status === 'succeeded') {
-                        setMessage(
-                            <>
-                                <h1>Payment Successful! Your subscription status is {subscriptionStatus}.</h1>
-                                <p>Your Stripe Payment Intent ID is <b>{paymentIntent.id}</b></p>
-                            </>
-                        )
+                        setPaymentIntentId(paymentIntent.id);
                     }
                 });
             }
         })();
-    }, [stripe, subscriptionStatus]);
+    }, [stripe, subscriptionStatus, isLoading]);
 
     return (
-        <div className='success-container'>
-            <div>{message}</div>
-        </div>
+        <main className='main'>
+            {
+                isLoading ? <h1>Loading...</h1> : 
+                <>
+                    <h1>Payment Successful! Your subscription status is {subscriptionStatus}.</h1>
+                    <h2>Your subscription type is {subscriptionType}.</h2>
+                    <p>Your Stripe Payment Intent ID is <b>{paymentIntentId}</b></p>
+                </>
+            }
+        </main>
     );
 };
 

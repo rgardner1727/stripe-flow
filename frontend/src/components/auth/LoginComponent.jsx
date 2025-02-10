@@ -1,23 +1,41 @@
-import {useState, useEffect} from 'react';
-import {useAuth} from '../../contexts/AuthContext';
-import {useNavigate, Link} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useSubscription } from '../../contexts/SubscriptionContext';
+import { useNavigate, Link } from 'react-router-dom';
 import '../../styles/form.css';
 
 const LoginComponent = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const {isAuthenticated, login} = useAuth();
+    const [form, setForm] = useState({
+        email: '',
+        password: ''
+    })
+    const { isAuthenticated, login } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(isAuthenticated)
-            return navigate('/');
-    })
+        (async () => {
+            if(isAuthenticated) {
+                try {
+                    navigate('/');
+                } catch(error) {
+                    console.log(error);
+                }
+            }
+        })();
+    }, []);
+
+
+    const handleChange = e => {
+        setForm(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
 
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const loginResult = await login(email, password);
+            const loginResult = await login(form.email, form.password);
             if(loginResult){
                 navigate('/');
             }
@@ -32,11 +50,11 @@ const LoginComponent = () => {
                 <h1 className='form-title'>Time to login!</h1>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='email'>Email</label>
-                    <input className='input' type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <input className='input' type='email' name='email' value={form.email} placeholder='Email' onChange={handleChange}/>
                 </fieldset>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='password'>Password</label>
-                    <input className='input' type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input className='input' type='password' name='password' value={form.password} placeholder='Password' onChange={handleChange}/>
                 </fieldset>
                 <button className='submit-button' type='submit'>Login</button>
                 <Link className='form-link' to='/register'>Don't have an account? Register here.</Link>
