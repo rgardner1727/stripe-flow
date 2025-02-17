@@ -12,6 +12,16 @@ export const SubscriptionProvider = ({children}) => {
     const [subscriptionType, setSubscriptionType] = useState(null);
     const { accessToken, email, logout } = useAuth();
 
+    useEffect(() => {
+        (async () => {
+            if(accessToken) {
+                const [_response, error] = await retrieveSubscription();
+
+                if(error) return;
+            }
+        })();
+    }, [subscriptionStatus, subscriptionType, accessToken]);
+
     const config = {
         headers : {
             'Authorization': `Bearer ${accessToken}`,
@@ -45,29 +55,6 @@ export const SubscriptionProvider = ({children}) => {
             return [null, error];
         }
     }
-
-    const refreshAccessTokenAndRetryRequest = async (requestFunction) => {
-        try {
-            await refreshAccessToken();
-
-            const response = await requestFunction();
-
-            return [response, null];
-        } catch(error) {
-            logout();
-            return [null, error];
-        }
-    }
-
-    useEffect(() => {
-        (async () => {
-            if(accessToken) {
-                const [_response, error] = await retrieveSubscription();
-
-                if(error) return;
-            }
-        })();
-    }, [subscriptionStatus, subscriptionType, accessToken]);
 
     const createSubscription = async (subscriptionType) => {
         let priceId;

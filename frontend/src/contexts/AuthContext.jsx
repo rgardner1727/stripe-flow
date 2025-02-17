@@ -1,5 +1,4 @@
 import {createContext, useState, useContext, useEffect} from 'react';
-import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 export const AuthContext = createContext();
@@ -70,6 +69,10 @@ export const AuthProvider = ({children}) => {
 
     const refreshAccessToken = async () => {
         try {
+            const currentPath = window.location.pathname;
+
+            if(currentPath === '/login' || currentPath === '/register' || currentPath === '/logout') return [null, new Error('Not allowed')];
+
             const response = await axios.post('http://localhost:4000/auth/refresh', { email });
 
             if(response.status === 201) {

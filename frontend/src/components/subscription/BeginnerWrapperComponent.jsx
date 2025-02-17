@@ -4,15 +4,6 @@ import { useEffect, useState } from 'react';
 
 const BeginnerWrapperComponent = ({children}) => {
     const { subscriptionType } = useSubscription();
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        if(subscriptionType === 'beginner' || subscriptionType === 'intermediate' || subscriptionType === 'advanced')
-            return;
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
-    }, [subscriptionType]);
 
     if(subscriptionType === 'beginner' || subscriptionType === 'intermediate' || subscriptionType === 'advanced')
         return children;

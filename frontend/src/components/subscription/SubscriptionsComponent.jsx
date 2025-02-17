@@ -19,7 +19,15 @@ const SubscriptionsComponent = () => {
         
         const [_response, error] = await createSubscription(subscriptionType);
 
-        if(error) await refreshAccessToken();
+        if(error) {
+            const [_refreshResponse, refreshError] = await refreshAccessToken();
+
+            if(refreshError) return logout();
+
+            const [_createResponse, createError] = await createSubscription(subscriptionType);
+
+            if(createError) return;
+        }
 
         navigate('/stripe/payment');
     }
@@ -56,8 +64,6 @@ const SubscriptionsComponent = () => {
             handleSubmit={handleSubmit} subscriptionStatus={subscriptionStatus}
         />
     ]
-
-
 
     return (
         subscriptionStatus && <main className='main'>

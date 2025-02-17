@@ -7,7 +7,7 @@ const AdvancedWrapperComponent = ({children}) => {
     if(subscriptionType === 'advanced')
         return children;
     else
-        return <Navigate to='/'/>
+        return <main className='main'><h1>Loading...</h1></main>
 }
 
 export default AdvancedWrapperComponent;
