@@ -5,10 +5,9 @@ import { useNavigate } from "react-router-dom";
 import '../../styles/subscription-comp.css';
 import SubscriptionCardComponent from './SubscriptionCardComponent';
 
-
 const SubscriptionsComponent = () => {
-    const {email} = useAuth();
-    const {createSubscription, subscriptionStatus, subscriptionType, refreshSubscription} = useSubscription();
+    const { email, refreshAccessToken } = useAuth();
+    const { createSubscription, subscriptionStatus, subscriptionType } = useSubscription();
     const navigate = useNavigate();
 
     const handleSubmit = async (e, subscriptionType) => {
@@ -17,12 +16,12 @@ const SubscriptionsComponent = () => {
             return;
         if(subscriptionStatus === 'active' || subscriptionStatus === 'cancelled')
             return navigate('/manage-subscription');
-        try {
-            await createSubscription(subscriptionType);
-            navigate('/stripe/payment');
-        } catch(error) {
-            console.log(error);
-        }
+        
+        const [_response, error] = await createSubscription(subscriptionType);
+
+        if(error) await refreshAccessToken();
+
+        navigate('/stripe/payment');
     }
 
     const subscriptionCards = [

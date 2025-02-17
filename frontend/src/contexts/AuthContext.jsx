@@ -1,49 +1,95 @@
 import {createContext, useState, useContext, useEffect} from 'react';
+import { Navigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { jwtDecode } from 'jwt-decode';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(() => localStorage.getItem('isAuthenticated') === 'true');
-    const [email, setEmail] = useState(() => {
-        const storedEmail = localStorage.getItem('userEmail');
-        return storedEmail || '';
-    });
+    const [accessToken, setAccessToken] = useState();
+    const [email, setEmail] = useState(() => localStorage.getItem('email'));
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            const [_response, error] = await refreshAccessToken();
+
+            if(error) return;
+        })();
+    }, [accessToken, isLoggedIn]);
+
+    const register = async (firstName, lastName, email, password) => {
+        try {
+            const response = await axios.post('http://localhost:4000/auth/register', { firstName, lastName, email, password });
+
+            if(response.status === 201)
+                return [response, null];
+        } catch(error) {
+            return [null, error];
+        }
+    }
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post('http://localhost:3000/auth/login', {email, password});
+            const response = await axios.post('http://localhost:4000/auth/login', { email, password });
+
             if(response.status === 201){
-                setIsAuthenticated(true);
+                setAccessToken(response.data.accessToken);
+
+                const email = jwtDecode(response.data.accessToken).email;
+
                 setEmail(email);
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('isAuthenticated', 'true');
-                return true;
+
+                localStorage.setItem('email', email);
+
+                setIsLoggedIn(true);
+
+                return [response, null];
             }
         } catch(error) {
-            console.log(error);
+            return [null, error];
         }
     }
 
-    const register = async (name, email, password) => {
+    const logout = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', {name, email, password});
-            if(response.status === 201)
-                return true;
-        } catch(error) {
-            console.log(error);
+            const response = await axios.post('http://localhost:4000/auth/logout', { email });
+
+            if(response.status === 204) {
+                setIsLoggedIn(false);
+
+                setAccessToken(null);
+
+                setEmail(null);
+
+                return [response, null];
+            }
+        } catch (error) {
+            return [null, error];
         }
     }
 
-    const logout = () => {
-        setIsAuthenticated(false);
-        setEmail('');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('isAuthenticated');
+    const refreshAccessToken = async () => {
+        try {
+            const response = await axios.post('http://localhost:4000/auth/refresh', { email });
+
+            if(response.status === 201) {
+                setAccessToken(response.data.accessToken);
+
+                setEmail(jwtDecode(response.data.accessToken).email);
+
+                localStorage.setItem('email', jwtDecode(response.data.accessToken).email);
+
+                setIsLoggedIn(true);
+
+                return [response, null];
+            }
+        } catch(error) {
+            return [null, error];
+        }
     }
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, email, login, register, logout}}>
+        <AuthContext.Provider value={{ accessToken, email, isLoggedIn, register, login, logout, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     )

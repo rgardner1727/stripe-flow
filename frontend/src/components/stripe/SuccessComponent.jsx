@@ -5,7 +5,7 @@ import { useStripe } from '@stripe/react-stripe-js';
 const SuccessComponent = () => {
     const stripe = useStripe();
     const [paymentIntentId, setPaymentIntentId] = useState('');
-    const { subscriptionStatus, subscriptionType, refreshSubscription } = useSubscription();
+    const { subscriptionStatus, subscriptionType, retrieveSubscription } = useSubscription();
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -19,7 +19,7 @@ const SuccessComponent = () => {
             // Get the payment intent client secret from the URL
             const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');
 
-            await refreshSubscription();
+            await retrieveSubscription();
 
             if (clientSecret) {
                 stripe.retrievePaymentIntent(clientSecret).then(async ({ paymentIntent }) => {

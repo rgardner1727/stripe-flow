@@ -5,10 +5,12 @@ import '../../styles/form.css';
 
 const RegisterComponent = () => {
     const [form, setForm] = useState({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '', 
         password: ''
     })
+
     const {isAuthenticated, register} = useAuth();
     const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ const RegisterComponent = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            const registerResult = await register(form.name, form.email, form.password);
+            const registerResult = await register(form.firstName, form.lastName, form.email, form.password);
             if(registerResult){
                 navigate('/login');
             }
@@ -41,14 +43,16 @@ const RegisterComponent = () => {
             <form className='form' onSubmit={handleSubmit}>
                 <h1 className='form-title'>Time to register!</h1>
                 <fieldset className='fieldset'>
-                    <label className='label' htmlFor='name'>Name</label>
-                    <input className='input' type='text' name='name' value={form.name} placeholder='Name' onChange={handleChange}/>
+                    <label className='label' htmlFor='firstName'>First Name</label>
+                    <input className='input' type='text' name='firstName' value={form.firstName} placeholder='First Name' onChange={handleChange}/>
+                </fieldset>
+                <fieldset className='fieldset'>
+                    <label className='label' htmlFor='lastName'>Last Name</label>
+                    <input className='input' type='text' name='lastName' value={form.lastName} placeholder='Last Name' onChange={handleChange}/>
                 </fieldset>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='email'>Email</label>
                     <input className='input' type='email' name='email' value={form.email} placeholder='Email' onChange={handleChange}/>
-
-
                 </fieldset>
                 <fieldset className='fieldset'>
                     <label className='label' htmlFor='password'>Password</label>

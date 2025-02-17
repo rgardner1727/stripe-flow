@@ -6,11 +6,11 @@ import '../../styles/header.css';
 
 
 const HeaderComponent = () => {
-    const { isAuthenticated } = useAuth();
+    const { accessToken } = useAuth();
     const { subscriptionType } = useSubscription();
 
     return (
-        isAuthenticated && <header className='header'>
+        accessToken && <header className='header'>
             <nav className='nav'>
                 <ul className='nav-list'>
                     <li className='nav-item'><Link to='/'>Home</Link></li>

@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const User = require('../schemas/userSchema');
 const stripe = require('stripe')(process.env.STRIPE_SK_TEST);
+const authenticateAccessToken = require('../middleware/authenticateAccessToken');
 
 router.use(express.json());
 
-router.post('/create-subscription', async (req, res) => {
+router.post('/create-subscription', authenticateAccessToken, async (req, res) => {
     try {
-        const {email, priceId} = req.body;
-        const user = await User.findOne({email: email});
+        const { email, priceId } = req.body;
+        const user = await User.findOne({ email: email });
         if(!user)
             return res.status(404).json({message: 'User with email not found'});
         if(user.subscription.id && user.subscription.status === 'active')
@@ -38,7 +39,7 @@ router.post('/create-subscription', async (req, res) => {
     }
 })
 
-router.post('/retrieve-subscription', async (req, res) => {
+router.post('/retrieve-subscription', authenticateAccessToken, async (req, res) => {
     try {
         const {email} = req.body;
         const user = await User.findOne({email: email});
@@ -53,7 +54,7 @@ router.post('/retrieve-subscription', async (req, res) => {
     }
 })
 
-router.post('/cancel-subscription', async (req, res) => {
+router.post('/cancel-subscription', authenticateAccessToken, async (req, res) => {
     try {
         const {email} = req.body;
         const user = await User.findOne({email: email});
@@ -68,14 +69,14 @@ router.post('/cancel-subscription', async (req, res) => {
         });
         user.subscription.status = 'cancelled';
         await user.save();
-        return res.status(200).send({message: 'Subscription will be cancelled at the end of the current period.'});
+        return res.status(200).send({message: 'Subscription will be cancelled at the end of the current period.', subscriptionStatus: 'cancelled'});
     } catch(error) {
         console.log(error);
         res.status(500).send('Internal server error. Could not cancel subscription.');
     }
 })
 
-router.post('/change-subscription', async (req, res) => {
+router.post('/change-subscription', authenticateAccessToken, async (req, res) => {
     try {
         const {email, priceId} = req.body;
         const user = await User.findOne({email: email});
@@ -108,7 +109,7 @@ router.post('/change-subscription', async (req, res) => {
     }
 })
 
-router.get('/retrieve-prices', async (req, res) => {
+router.get('/retrieve-prices', authenticateAccessToken, async (req, res) => {
     const prices = await stripe.prices.list();
     res.json(prices);
 })

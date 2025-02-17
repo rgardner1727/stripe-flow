@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useSubscription } from '../../contexts/SubscriptionContext';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../styles/form.css';
 
@@ -9,20 +8,13 @@ const LoginComponent = () => {
         email: '',
         password: ''
     })
-    const { isAuthenticated, login } = useAuth();
+    const { accessToken, login } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        (async () => {
-            if(isAuthenticated) {
-                try {
-                    navigate('/');
-                } catch(error) {
-                    console.log(error);
-                }
-            }
-        })();
-    }, []);
+        if(accessToken) 
+            navigate('/');
+    }, [accessToken, navigate]);
 
 
     const handleChange = e => {
@@ -34,14 +26,12 @@ const LoginComponent = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        try {
-            const loginResult = await login(form.email, form.password);
-            if(loginResult){
-                navigate('/');
-            }
-        } catch(error) {
-            console.log(error);
-        }
+
+        const [_response, error] = await login(form.email, form.password);
+
+        if(error) return;
+
+        navigate('/');
     }
 
     return (

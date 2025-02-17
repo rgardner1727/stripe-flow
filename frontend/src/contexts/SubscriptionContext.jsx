@@ -10,37 +10,68 @@ export const SubscriptionProvider = ({children}) => {
     const [clientSecret, setClientSecret] = useState(null);
     const [subscriptionStatus, setSubscriptionStatus] = useState(null);
     const [subscriptionType, setSubscriptionType] = useState(null);
-    const { email } = useAuth();
+    const { accessToken, email, logout } = useAuth();
 
-    useEffect(() => {
-        (async () => {
-            if(email) {
-                try {
-                    const response = await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email});
-                    setSubscriptionStatus(response.data.status);
-                    setSubscriptionType(response.data.type);
-                } catch(error) {
-                    console.log(error);
-                }
-            }
-        })()
-    }, [subscriptionStatus, subscriptionType, email]);
-
-    const refreshSubscription = async () => {
-        if(email) {
-            try {
-                const response = await axios.post('http://localhost:3000/stripe/retrieve-subscription', {email});
-                setSubscriptionStatus(response.data.status);
-                setSubscriptionType(response.data.type);
-            } catch(error) {
-                throw error;
-            }
-
+    const config = {
+        headers : {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
         }
     }
 
+    const retrieveSubscription = async () => {
+        try {
+            const response = await axios.post('http://localhost:4000/stripe/retrieve-subscription', { email }, config);
+
+            setSubscriptionStatus(response.data.status);
+
+            setSubscriptionType(response.data.type);
+
+            return [response, null];
+        } catch(error) {
+            return [null, error];
+        }
+    }
+    const cancelSubscription = async () => {
+        try {
+            const response = await axios.post('http://localhost:4000/stripe/cancel-subscription', {email}, config);
+
+            setSubscriptionStatus(response.data.subscriptionStatus);
+
+            alert(response.data.message);
+
+            return [response, null];
+        } catch(error) {
+            return [null, error];
+        }
+    }
+
+    const refreshAccessTokenAndRetryRequest = async (requestFunction) => {
+        try {
+            await refreshAccessToken();
+
+            const response = await requestFunction();
+
+            return [response, null];
+        } catch(error) {
+            logout();
+            return [null, error];
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            if(accessToken) {
+                const [_response, error] = await retrieveSubscription();
+
+                if(error) return;
+            }
+        })();
+    }, [subscriptionStatus, subscriptionType, accessToken]);
+
     const createSubscription = async (subscriptionType) => {
         let priceId;
+
         switch (subscriptionType) {
             case 'beginner':    
                 priceId = import.meta.env.VITE_BEGINNER_PRICE_ID;
@@ -56,25 +87,21 @@ export const SubscriptionProvider = ({children}) => {
                 return;
         }
         try {
-            const response = await axios.post('http://localhost:3000/stripe/create-subscription', {email, priceId});
-                setSubscriptionId(response.data.subscriptionId);
-                setClientSecret(response.data.clientSecret);
-            } catch(error) {
-                throw error;
-            }
-    }
+            const response = await axios.post('http://localhost:4000/stripe/create-subscription', { email, priceId }, config);
 
-    const cancelSubscription = async () => {
-        try {
-            const response = await axios.post('http://localhost:3000/stripe/cancel-subscription', {email});
-            alert(response.data.message);
-            } catch(error) {
-                throw error;
-            }
+            setSubscriptionId(response.data.subscriptionId);
+
+            setClientSecret(response.data.clientSecret);
+
+            return [response, null];
+        } catch(error) {
+            return [null, error];
+        }
     }
 
     const changeSubscription = async (subscriptionType) => {
         let priceId;
+
         switch (subscriptionType) {
             case 'beginner':    
                 priceId = import.meta.env.VITE_BEGINNER_PRICE_ID;
@@ -90,21 +117,25 @@ export const SubscriptionProvider = ({children}) => {
                 return;
         }
         try {
-            const response = await axios.post('http://localhost:3000/stripe/change-subscription', {email, priceId});
-                setSubscriptionId(response.data.subscriptionId);
-                setClientSecret(response.data.clientSecret);
-                setSubscriptionStatus('temporary');
-            } catch(error) {
-                throw error;
-            }
+            const response = await axios.post('http://localhost:4000/stripe/change-subscription', {email, priceId}, config);
+
+            setSubscriptionId(response.data.subscriptionId);
+
+            setClientSecret(response.data.clientSecret);
+
+            setSubscriptionStatus('temporary');
+
+            return [response, null];
+        } catch(error) {
+            return [null, error];
+        }
     }
 
 
     return (
         <SubscriptionContext.Provider value={{
             subscriptionId, clientSecret, createSubscription, 
-            subscriptionStatus, subscriptionType, cancelSubscription, 
-            refreshSubscription, changeSubscription}}>
+            subscriptionStatus, subscriptionType, cancelSubscription, changeSubscription, retrieveSubscription}}>
             {children}
         </SubscriptionContext.Provider>
     )

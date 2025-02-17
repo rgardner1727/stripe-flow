@@ -5,25 +5,37 @@ import { useNavigate } from "react-router-dom";
 import '../../styles/subscription-comp.css';
 import SubscriptionCardComponent from './SubscriptionCardComponent';
 
-const ManageSubscriptionComponent = ({}) => {
-    const { email } = useAuth();
+const ManageSubscriptionComponent = () => {
+    const { email, refreshAccessToken, logout } = useAuth();
     const { subscriptionType, cancelSubscription, changeSubscription, refreshSubscription, subscriptionStatus } = useSubscription();
     const navigate = useNavigate();
 
     const handleCancelSubscription = async e => {
         e.preventDefault();
-        cancelSubscription()
-            .catch(error => alert(error.response.data.message));
+        
+        const [_response, error] = await cancelSubscription();
+
+        if(error) 
+            alert(error.response.data.message);
     }
 
     const handleChangeSubscription = async (e, type) => {
         e.preventDefault();
-        try {
-            await changeSubscription(type);
-            return navigate('/stripe/payment');
-        } catch(error) {
-            console.log(error);
+
+        const [_response, error] = await changeSubscription(type);
+
+        if(error) {
+            const [_refreshResponse, refreshError] = await refreshAccessToken();
+
+            if(refreshError)
+                return logout();
+
+            const [_retryResponse, retryError] = await changeSubscription(type);
+
+            if(retryError) return;
         }
+
+        return navigate('/stripe/payment');
     }
 
     const subscriptionCards = [
