@@ -1,0 +1,81 @@
+/* Style for aside */
+.aside-open {
+    background-color: #e4e4e4;
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 90%;
+    z-index: 100;
+    border-right: 1px solid #ccc;
+}
+
+.aside-closed {
+    display: none;
+}
+
+/* Style for navigation bar */
+.nav {
+    height: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    height: 100%;
+}
+
+.nav-list-right {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    margin-top: auto;
+}
+
+.nav-item {
+    margin-top: 20px;
+}
+
+.separate-nav-item {
+    margin-top: auto;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-item a:hover {
+    background-color: #e6f0ff;
+}
+
+.toggle-aside-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    z-index: 100;
+}
+
+/* Media Queries for Responsive Design */

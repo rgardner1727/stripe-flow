@@ -1,6 +1,8 @@
 import {createContext, useState, useContext, useEffect} from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
@@ -12,7 +14,7 @@ export const AuthProvider = ({children}) => {
         (async () => {
             const [_response, error] = await refreshAccessToken();
 
-            if(error) return;
+            if(error) return <Navigate to='/login' />;
         })();
     }, [accessToken, isLoggedIn]);
 

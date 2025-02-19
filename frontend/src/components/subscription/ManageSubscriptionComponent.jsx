@@ -7,8 +7,10 @@ import SubscriptionCardComponent from './SubscriptionCardComponent';
 
 const ManageSubscriptionComponent = () => {
     const { email, refreshAccessToken, logout } = useAuth();
-    const { subscriptionType, cancelSubscription, changeSubscription, refreshSubscription, subscriptionStatus } = useSubscription();
+    const { subscriptionType, cancelSubscription, changeSubscription, subscriptionStatus } = useSubscription();
     const navigate = useNavigate();
+
+    console.log(subscriptionStatus);
 
     const handleCancelSubscription = async e => {
         e.preventDefault();
@@ -73,17 +75,19 @@ const ManageSubscriptionComponent = () => {
     ]
 
     return (
-        <main className='main'>
-            <section className='subscription-section'>
-                <div className='subscription-header-container'>
-                    <h1 className='subscription-header'>Manage Subscription</h1>
-                    <button className='cancel-subscription-button' onClick={e => handleCancelSubscription(e)}>Cancel Subscription</button>
-                </div>
+        <section className='subscription-section'>
+            <div className='subscription-header-container'>
+                <h1 className='subscription-header'>Manage Subscription</h1>
+                {subscriptionStatus === 'active' && <button className='cancel-subscription-button' onClick={e => handleCancelSubscription(e)}>Cancel Subscription</button>}
+            </div>
+            {subscriptionStatus === 'active' ? 
                 <div className='subscriptions-container'>
                     {subscriptionCards.filter(card => card.props.type.toLowerCase() !== subscriptionType)}
-                </div>
-            </section>
-        </main>
+                </div> 
+                : 
+                <h1>Your subscription has been cancelled.</h1>
+            }
+        </section>
     )
 }
 

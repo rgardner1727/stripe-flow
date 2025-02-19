@@ -66,8 +66,8 @@ const SubscriptionsComponent = () => {
     ]
 
     return (
-        subscriptionStatus && <main className='main'>
-            {subscriptionStatus === 'active' || subscriptionStatus === 'cancelled' ? 
+        <>
+            {subscriptionStatus === 'active' || subscriptionStatus === 'cancelled' ?
                 <>
                     <section className='subscription-section'>
                         <div className='subscription-header-container'>
@@ -90,7 +90,7 @@ const SubscriptionsComponent = () => {
                     </section>
                 </>
             }
-        </main>
+        </>
     )
 }
 

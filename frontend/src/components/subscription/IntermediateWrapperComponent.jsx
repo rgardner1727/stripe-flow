@@ -7,7 +7,7 @@ const IntermediateWrapperComponent = ({children}) => {
     if(subscriptionType === 'intermediate' || subscriptionType === 'advanced')
         return children;
     else
-        return <main className='main'><h1>Loading...</h1></main>
+        return <h1>Loading...</h1>
 }
 
 export default IntermediateWrapperComponent;

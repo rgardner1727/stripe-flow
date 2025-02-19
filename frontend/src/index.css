@@ -4,6 +4,7 @@ html, body, #root {
   font-size: 16px;
   margin: 0px;
   padding: 0px;
+  background-color: #e0e0e0;
 }
 
 * {
@@ -12,14 +13,83 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-#root {
-  display: grid;
-  grid-template-rows: 75px auto 100px;
-}
-
-.main {
+.app-container-logged-out {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
+
+.app-container-logged-in {
+  display: grid;
+  grid-template-rows: auto 10%;
+  height: 100%;
+}
+
+.aside-main-container-logged-out {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.aside-main-container-logged-in {
+  display: grid;
+  grid-template-columns: 200px auto;
+  height: 100%;
+}
+
+.main-logged-out {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.main-logged-in {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 900px;
+  grid-column: 2/2;
+}
+
+@media (max-width: 1280px) {
+  .aside-main-container-logged-in {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .main-logged-in {
+    width: 800px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-logged-in {
+    width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-logged-in {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-logged-in {
+    width: 100%;
+  }
+}
+
+
+
+

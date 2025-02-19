@@ -14,13 +14,12 @@ const StripeComponent = () => {
     const { isAccessTokenExpired } = useAuth();
 
     return (
-        <main className='main'>
+        <>
             {isSuccessPage ? 
                 <Elements stripe={stripePromise}><Outlet/></Elements> : 
                 <Elements stripe={stripePromise} options={{ clientSecret }}><Outlet/></Elements>
             }
-        </main>
-
+        </>
     )
 }
 
